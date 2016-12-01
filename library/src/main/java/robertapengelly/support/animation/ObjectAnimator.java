@@ -1,10 +1,11 @@
 package robertapengelly.support.animation;
 
 import  android.os.Build;
-import  robertapengelly.support.util.Property;
 import  android.view.View;
 
 import  java.util.HashMap;
+
+import  robertapengelly.support.util.Property;
 
 /**
  * This subclass of {@link ValueAnimator} provides support for animating properties on target objects.

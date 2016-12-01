@@ -1,9 +1,10 @@
 package robertapengelly.support.animation;
 
+import  android.view.View;
+
 import  robertapengelly.support.util.FloatProperty;
 import  robertapengelly.support.util.IntProperty;
 import  robertapengelly.support.util.Property;
-import  android.view.View;
 
 final class PreHoneycombCompat {
 

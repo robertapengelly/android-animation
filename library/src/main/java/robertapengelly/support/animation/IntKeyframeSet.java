@@ -1,7 +1,8 @@
 package robertapengelly.support.animation;
 
-import  robertapengelly.support.animation.Keyframe.IntKeyframe;
 import  android.view.animation.Interpolator;
+
+import  robertapengelly.support.animation.Keyframe.IntKeyframe;
 
 /**
  * This class holds a collection of IntKeyframe objects and is called by ValueAnimator to calculate values between those

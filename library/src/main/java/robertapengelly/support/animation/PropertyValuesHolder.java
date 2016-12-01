@@ -1,14 +1,15 @@
 package robertapengelly.support.animation;
 
-import  robertapengelly.support.util.FloatProperty;
-import  robertapengelly.support.util.IntProperty;
-import  robertapengelly.support.util.Property;
 import  android.util.Log;
 
 import  java.lang.reflect.InvocationTargetException;
 import  java.lang.reflect.Method;
 import  java.util.HashMap;
 import  java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import  robertapengelly.support.util.FloatProperty;
+import  robertapengelly.support.util.IntProperty;
+import  robertapengelly.support.util.Property;
 
 /**
  * This class holds information about a property and the values that that property

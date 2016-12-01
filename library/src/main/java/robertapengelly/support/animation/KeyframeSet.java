@@ -1,12 +1,13 @@
 package robertapengelly.support.animation;
 
-import  robertapengelly.support.animation.Keyframe.FloatKeyframe;
-import  robertapengelly.support.animation.Keyframe.IntKeyframe;
-import  robertapengelly.support.animation.Keyframe.ObjectKeyframe;
 import  android.view.animation.Interpolator;
 
 import  java.util.ArrayList;
 import  java.util.Arrays;
+
+import  robertapengelly.support.animation.Keyframe.FloatKeyframe;
+import  robertapengelly.support.animation.Keyframe.IntKeyframe;
+import  robertapengelly.support.animation.Keyframe.ObjectKeyframe;
 
 /**
  * This class holds a collection of Keyframe objects and is called by ValueAnimator to calculate
