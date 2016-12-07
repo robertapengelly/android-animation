@@ -1,7 +1,6 @@
 package robertapengelly.support.animation;
 
 /** This evaluator can be used to perform type interpolation between <code>int</code> values. */
-@SuppressWarnings("unused")
 public class IntEvaluator implements TypeEvaluator<Integer> {
 
     /**

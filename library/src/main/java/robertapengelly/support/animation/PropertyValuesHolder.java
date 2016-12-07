@@ -17,7 +17,6 @@ import  robertapengelly.support.util.Property;
  * animations with ValueAnimator or ObjectAnimator that operate on several different properties
  * in parallel.
  */
-@SuppressWarnings("unused")
 public class PropertyValuesHolder implements Cloneable {
 
     // These maps hold all property entries for a particular class. This map
@@ -267,7 +266,24 @@ public class PropertyValuesHolder implements Cloneable {
                     return returnVal;
                 
                 } catch (NoSuchMethodException e) {
-                    // Swallow the error and keep trying other variants
+                
+                    /* The native implementation uses JNI to do reflection, which allows access to private methods.
+                     * getDeclaredMethod(..) does not find superclass methods, so it's implemented as a fallback.
+                     */
+                    try {
+                    
+                        returnVal = targetClass.getDeclaredMethod(methodName, args);
+                        returnVal.setAccessible(true);
+                        
+                        // change the value type to suit
+                        mValueType = typeVariant;
+                        
+                        return returnVal;
+                    
+                    } catch (NoSuchMethodException e2) {
+                        // Swallow the error and keep trying other variants
+                    }
+                
                 }
             
             }

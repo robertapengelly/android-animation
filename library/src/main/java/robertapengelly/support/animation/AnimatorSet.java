@@ -26,7 +26,6 @@ import  java.util.List;
  * circular dependencies do not make logical sense anyway), circular dependencies
  * should be avoided, and the dependency flow of animations should only be in one direction.
  */
-@SuppressWarnings("unused")
 public final class AnimatorSet extends Animator {
 
     // Animator used for a nonzero startDelay
@@ -240,6 +239,7 @@ public final class AnimatorSet extends Animator {
     public void end() {
     
         mTerminated = true;
+        
         if (!isStarted())
             return;
         
@@ -291,7 +291,7 @@ public final class AnimatorSet extends Animator {
     
         ArrayList<Animator> childList = new ArrayList<>();
         
-        for(Node node : mNodes)
+        for (Node node : mNodes)
             childList.add(node.animation);
         
         return childList;
@@ -578,66 +578,90 @@ public final class AnimatorSet extends Animator {
      * -   any nodes with no dependencies are added to the roots list
      */
     private void sortNodes() {
+    
         if (mNeedsSort) {
+        
             mSortedNodes.clear();
-            ArrayList<Node> roots = new ArrayList<Node>();
+            
+            ArrayList<Node> roots = new ArrayList<>();
             int numNodes = mNodes.size();
+            
             for (int i = 0; i < numNodes; ++i) {
+            
                 Node node = mNodes.get(i);
-                if (node.dependencies == null || node.dependencies.size() == 0) {
+                
+                if ((node.dependencies == null) || (node.dependencies.size() == 0))
                     roots.add(node);
-                }
+            
             }
-            ArrayList<Node> tmpRoots = new ArrayList<Node>();
+            
+            ArrayList<Node> tmpRoots = new ArrayList<>();
+            
             while (roots.size() > 0) {
+            
                 int numRoots = roots.size();
+                
                 for (int i = 0; i < numRoots; ++i) {
+                
                     Node root = roots.get(i);
                     mSortedNodes.add(root);
+                    
                     if (root.nodeDependents != null) {
-                        int numDependents = root.nodeDependents.size();
-                        for (int j = 0; j < numDependents; ++j) {
-                            Node node = root.nodeDependents.get(j);
+                    
+                        for (Node node : root.nodeDependents) {
+                        
                             node.nodeDependencies.remove(root);
-                            if (node.nodeDependencies.size() == 0) {
+                            
+                            if (node.nodeDependencies.size() == 0)
                                 tmpRoots.add(node);
-                            }
+                        
                         }
+                    
                     }
+                
                 }
+                
                 roots.clear();
                 roots.addAll(tmpRoots);
+                
                 tmpRoots.clear();
+            
             }
+            
             mNeedsSort = false;
-            if (mSortedNodes.size() != mNodes.size()) {
-                throw new IllegalStateException("Circular dependencies cannot exist"
-                        + " in AnimatorSet");
-            }
+            
+            if (mSortedNodes.size() != mNodes.size())
+                throw new IllegalStateException("Circular dependencies cannot exist in AnimatorSet");
+        
         } else {
+        
             // Doesn't need sorting, but still need to add in the nodeDependencies list
             // because these get removed as the event listeners fire and the dependencies
             // are satisfied
-            int numNodes = mNodes.size();
-            for (int i = 0; i < numNodes; ++i) {
-                Node node = mNodes.get(i);
-                if (node.dependencies != null && node.dependencies.size() > 0) {
-                    int numDependencies = node.dependencies.size();
-                    for (int j = 0; j < numDependencies; ++j) {
-                        Dependency dependency = node.dependencies.get(j);
-                        if (node.nodeDependencies == null) {
-                            node.nodeDependencies = new ArrayList<Node>();
-                        }
-                        if (!node.nodeDependencies.contains(dependency.node)) {
+            for (Node node: mNodes) {
+            
+                if ((node.dependencies != null) && (node.dependencies.size() > 0)) {
+                
+                    for (Dependency dependency : node.dependencies) {
+                    
+                        if (node.nodeDependencies == null)
+                            node.nodeDependencies = new ArrayList<>();
+                        
+                        if (!node.nodeDependencies.contains(dependency.node))
                             node.nodeDependencies.add(dependency.node);
-                        }
+                    
                     }
+                
                 }
+                
                 // nodes are 'done' by default; they become un-done when started, and done
                 // again when ended
                 node.done = false;
+            
             }
+        
         }
+    
     }
     
     /**
@@ -907,13 +931,13 @@ public final class AnimatorSet extends Animator {
      * after other, different, animations.</p>
      */
     public class Builder {
-
+    
         /**
          * This tracks the current node being processed. It is supplied to the play() method
          * of AnimatorSet and passed into the constructor of Builder.
          */
         private Node mCurrentNode;
-
+        
         /**
          * package-private constructor. Builders are only constructed by AnimatorSet, when the
          * play() method is called.
@@ -922,14 +946,20 @@ public final class AnimatorSet extends Animator {
          * the other methods of this Builder object.
          */
         Builder(Animator anim) {
+        
             mCurrentNode = mNodeMap.get(anim);
+            
             if (mCurrentNode == null) {
+            
                 mCurrentNode = new Node(anim);
+                
                 mNodeMap.put(anim, mCurrentNode);
                 mNodes.add(mCurrentNode);
+            
             }
+        
         }
-
+        
         /**
          * Sets up the given animation to play at the same time as the animation supplied in the
          * {@link AnimatorSet#play(Animator)} call that created this <code>Builder</code> object.
@@ -938,17 +968,25 @@ public final class AnimatorSet extends Animator {
          * {@link AnimatorSet#play(Animator)} method starts.
          */
         public Builder with(Animator anim) {
+        
             Node node = mNodeMap.get(anim);
+            
             if (node == null) {
+            
                 node = new Node(anim);
+                
                 mNodeMap.put(anim, node);
                 mNodes.add(node);
+            
             }
+            
             Dependency dependency = new Dependency(mCurrentNode, Dependency.WITH);
             node.addDependency(dependency);
+            
             return this;
+        
         }
-
+        
         /**
          * Sets up the given animation to play when the animation supplied in the
          * {@link AnimatorSet#play(Animator)} call that created this <code>Builder</code> object
@@ -958,17 +996,25 @@ public final class AnimatorSet extends Animator {
          * {@link AnimatorSet#play(Animator)} method ends.
          */
         public Builder before(Animator anim) {
+        
             Node node = mNodeMap.get(anim);
+            
             if (node == null) {
+            
                 node = new Node(anim);
+                
                 mNodeMap.put(anim, node);
                 mNodes.add(node);
+            
             }
+            
             Dependency dependency = new Dependency(mCurrentNode, Dependency.AFTER);
             node.addDependency(dependency);
+            
             return this;
+        
         }
-
+        
         /**
          * Sets up the given animation to play when the animation supplied in the
          * {@link AnimatorSet#play(Animator)} call that created this <code>Builder</code> object
@@ -978,17 +1024,25 @@ public final class AnimatorSet extends Animator {
          * {@link AnimatorSet#play(Animator)} method to play.
          */
         public Builder after(Animator anim) {
+        
             Node node = mNodeMap.get(anim);
+            
             if (node == null) {
+            
                 node = new Node(anim);
+                
                 mNodeMap.put(anim, node);
                 mNodes.add(node);
+            
             }
+            
             Dependency dependency = new Dependency(node, Dependency.AFTER);
             mCurrentNode.addDependency(dependency);
+            
             return this;
+        
         }
-
+        
         /**
          * Sets up the animation supplied in the
          * {@link AnimatorSet#play(Animator)} call that created this <code>Builder</code> object
@@ -998,13 +1052,16 @@ public final class AnimatorSet extends Animator {
          * animation starts.
          */
         public Builder after(long delay) {
+        
             // setup dummy ValueAnimator just to run the clock
             ValueAnimator anim = ValueAnimator.ofFloat(0f, 1f);
             anim.setDuration(delay);
+            
             after(anim);
             return this;
+        
         }
-
+    
     }
     
     /**
@@ -1013,19 +1070,23 @@ public final class AnimatorSet extends Animator {
      *
      */
     private static class Dependency {
+    
         static final int WITH = 0; // dependent node must start with this dependency node
         static final int AFTER = 1; // dependent node must start when this dependency node finishes
-
-        // The node that the other node with this Dependency is dependent upon
-        public Node node;
-
+        
         // The nature of the dependency (WITH or AFTER)
         public int rule;
-
+        
+        // The node that the other node with this Dependency is dependent upon
+        public Node node;
+        
         public Dependency(Node node, int rule) {
+        
             this.node = node;
             this.rule = rule;
+        
         }
+    
     }
     
     /**
@@ -1131,8 +1192,16 @@ public final class AnimatorSet extends Animator {
      * well as dependencies of other nodes upon this (in the nodeDependents list).
      */
     private static class Node implements Cloneable {
+    
+        /**
+         * Flag indicating whether the animation in this node is finished. This flag
+         * is used by AnimatorSet to check, as each animation ends, whether all child animations
+         * are done and it's time to send out an end event for the entire AnimatorSet.
+         */
+        public boolean done = false;
+        
         public Animator animation;
-
+        
         /**
          *  These are the dependencies that this node's animation has on other
          *  nodes. For example, if this node's animation should begin with some
@@ -1140,7 +1209,20 @@ public final class AnimatorSet extends Animator {
          *  dependencies list for that other animation's node.
          */
         public ArrayList<Dependency> dependencies = null;
-
+        
+        /**
+         * nodeDependencies is just a list of the nodes that this Node is dependent upon.
+         * This information is used in sortNodes(), to determine when a node is a root.
+         */
+        public ArrayList<Node> nodeDependencies = null;
+        
+        /**
+         * nodeDepdendents is the list of nodes that have this node as a dependency. This
+         * is a utility field used in sortNodes to facilitate removing this node as a
+         * dependency when it is a root node.
+         */
+        public ArrayList<Node> nodeDependents = null;
+        
         /**
          * tmpDependencies is a runtime detail. We use the dependencies list for sorting.
          * But we also use the list to keep track of when multiple dependencies are satisfied,
@@ -1151,27 +1233,7 @@ public final class AnimatorSet extends Animator {
          * list of satisfied dependencies.
          */
         public ArrayList<Dependency> tmpDependencies = null;
-
-        /**
-         * nodeDependencies is just a list of the nodes that this Node is dependent upon.
-         * This information is used in sortNodes(), to determine when a node is a root.
-         */
-        public ArrayList<Node> nodeDependencies = null;
-
-        /**
-         * nodeDepdendents is the list of nodes that have this node as a dependency. This
-         * is a utility field used in sortNodes to facilitate removing this node as a
-         * dependency when it is a root node.
-         */
-        public ArrayList<Node> nodeDependents = null;
-
-        /**
-         * Flag indicating whether the animation in this node is finished. This flag
-         * is used by AnimatorSet to check, as each animation ends, whether all child animations
-         * are done and it's time to send out an end event for the entire AnimatorSet.
-         */
-        public boolean done = false;
-
+        
         /**
          * Constructs the Node with the animation that it encapsulates. A Node has no
          * dependencies by default; dependencies are added via the addDependency()
@@ -1182,38 +1244,51 @@ public final class AnimatorSet extends Animator {
         public Node(Animator animation) {
             this.animation = animation;
         }
-
+        
         /**
          * Add a dependency to this Node. The dependency includes information about the
          * node that this node is dependency upon and the nature of the dependency.
          * @param dependency
          */
         public void addDependency(Dependency dependency) {
+        
             if (dependencies == null) {
-                dependencies = new ArrayList<Dependency>();
-                nodeDependencies = new ArrayList<Node>();
+            
+                dependencies = new ArrayList<>();
+                nodeDependencies = new ArrayList<>();
+            
             }
+            
             dependencies.add(dependency);
-            if (!nodeDependencies.contains(dependency.node)) {
+            
+            if (!nodeDependencies.contains(dependency.node))
                 nodeDependencies.add(dependency.node);
-            }
+            
             Node dependencyNode = dependency.node;
-            if (dependencyNode.nodeDependents == null) {
-                dependencyNode.nodeDependents = new ArrayList<Node>();
-            }
+            
+            if (dependencyNode.nodeDependents == null)
+                dependencyNode.nodeDependents = new ArrayList<>();
+            
             dependencyNode.nodeDependents.add(this);
+        
         }
-
+        
         @Override
         public Node clone() {
+        
             try {
+            
                 Node node = (Node) super.clone();
                 node.animation = (Animator) animation.clone();
+                
                 return node;
+            
             } catch (CloneNotSupportedException e) {
                throw new AssertionError();
             }
+        
         }
+    
     }
 
 }

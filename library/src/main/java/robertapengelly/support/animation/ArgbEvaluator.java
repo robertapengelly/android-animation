@@ -1,7 +1,6 @@
 package robertapengelly.support.animation;
 
 /** This evaluator can be used to perform type interpolation between integer values that represent ARGB colors. */
-@SuppressWarnings("unused")
 public class ArgbEvaluator implements TypeEvaluator {
 
     /**

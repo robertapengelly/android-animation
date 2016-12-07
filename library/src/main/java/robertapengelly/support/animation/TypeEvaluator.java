@@ -8,7 +8,6 @@ package robertapengelly.support.animation;
  *
  * @see ValueAnimator#setEvaluator(TypeEvaluator)
  */
-@SuppressWarnings("unused")
 public interface TypeEvaluator<T> {
 
     /**

@@ -17,7 +17,6 @@ import  robertapengelly.support.util.Property;
  * @see #setPropertyName(String)
  *
  */
-@SuppressWarnings("unused")
 public final class ObjectAnimator extends ValueAnimator {
 
     /** Whether or not the current running platform needs to be proxied. */

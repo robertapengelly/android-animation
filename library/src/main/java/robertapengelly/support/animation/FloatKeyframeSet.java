@@ -13,7 +13,6 @@ import  robertapengelly.support.animation.Keyframe.FloatKeyframe;
  * getValue() method when there is no custom TypeEvaluator set for the animation, so that values can be calculated without
  * autoboxing to the Object equivalents of these primitive types.</p>
  */
-@SuppressWarnings("unused")
 class FloatKeyframeSet extends KeyframeSet {
 
     private boolean firstTime = true;
@@ -60,7 +59,7 @@ class FloatKeyframeSet extends KeyframeSet {
                 fraction = mInterpolator.getInterpolation(fraction);
             
             if (mEvaluator == null)
-                return ((firstValue + fraction) * deltaValue);
+                return (firstValue + fraction * deltaValue);
             else
                 return ((Number) mEvaluator.evaluate(fraction, firstValue, lastValue)).floatValue();
         
@@ -83,6 +82,7 @@ class FloatKeyframeSet extends KeyframeSet {
                 fraction = interpolator.getInterpolation(fraction);
             
             float intervalFraction = ((fraction - prevFraction) / (nextFraction - prevFraction));
+            
             return  ((mEvaluator == null) ?
                         (prevValue + intervalFraction * (nextValue - prevValue)) :
                             ((Number) mEvaluator.evaluate(intervalFraction, prevValue, nextValue)).floatValue());
@@ -104,6 +104,7 @@ class FloatKeyframeSet extends KeyframeSet {
                 fraction = interpolator.getInterpolation(fraction);
             
             float intervalFraction = ((fraction - prevFraction) / (nextFraction - prevFraction));
+            
             return  ((mEvaluator == null) ?
                         (prevValue + intervalFraction * (nextValue - prevValue)) :
                             ((Number) mEvaluator.evaluate(intervalFraction, prevValue, nextValue)).floatValue());

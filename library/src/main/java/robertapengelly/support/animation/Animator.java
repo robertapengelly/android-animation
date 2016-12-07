@@ -8,7 +8,6 @@ import  java.util.ArrayList;
  * This is the superclass for classes which provide basic support for animations which can be started, ended, and have
  * <code>AnimatorListeners</code> added to them.
  */
-@SuppressWarnings("unused")
 public abstract class Animator implements Cloneable {
 
     /** The set of listeners to be sent events through the life of an animation. */

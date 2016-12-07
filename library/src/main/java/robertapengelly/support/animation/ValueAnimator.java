@@ -21,7 +21,6 @@ import  java.util.HashMap;
  * which accelerates into and decelerates out of an animation. This behavior can be changed by calling
  * {@link ValueAnimator#setInterpolator(Interpolator)}.</p>
  */
-@SuppressWarnings("unused")
 public class ValueAnimator extends Animator {
 
     /** The default amount of time in ms between animation frames */

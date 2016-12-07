@@ -1,7 +1,6 @@
 package robertapengelly.support.animation;
 
 /** This evaluator can be used to perform type interpolation between <code>float</code> values. */
-@SuppressWarnings("unused")
 public class FloatEvaluator implements TypeEvaluator<Number> {
 
     /**
@@ -20,7 +19,7 @@ public class FloatEvaluator implements TypeEvaluator<Number> {
     public Float evaluate(float fraction, Number startValue, Number endValue) {
     
         float startFloat = startValue.floatValue();
-        return ((startFloat + fraction) * (endValue.floatValue() - startFloat));
+        return (startFloat + fraction * (endValue.floatValue() - startFloat));
     
     }
 
